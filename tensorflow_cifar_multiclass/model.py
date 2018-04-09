@@ -39,7 +39,7 @@ import os
 import re
 import sys
 import tarfile
-import planet_input
+from tensorflow_cifar_multiclass import input
 from six.moves import urllib
 import tensorflow as tf
 
@@ -96,7 +96,7 @@ def _variable_on_cpu(name, shape, initializer):
       Variable Tensor
     """
     with tf.device('/cpu:0'):
-        dtype = planet_input.MASTER_DTYPE
+        dtype = input.MASTER_DTYPE
         var = tf.get_variable(name, shape, initializer=initializer, dtype=dtype)
     return var
 
@@ -120,7 +120,7 @@ def _variable_with_weight_decay(name, shape, stddev, wd):
     var = _variable_on_cpu(
         name,
         shape,
-        tf.truncated_normal_initializer(stddev=stddev, dtype=planet_input.MASTER_DTYPE))
+        tf.truncated_normal_initializer(stddev=stddev, dtype=input.MASTER_DTYPE))
     if wd is not None:
         weight_decay = tf.multiply(tf.nn.l2_loss(var), wd, name='weight_loss')
         tf.add_to_collection('losses', weight_decay)
@@ -140,7 +140,7 @@ def distorted_inputs():
     if not FLAGS.data_dir:
         raise ValueError('Please supply a data_dir')
     data_dir = os.path.join(FLAGS.data_dir,)
-    images, labels = planet_input.distorted_inputs(data_dir)
+    images, labels = input.distorted_inputs(data_dir)
     return images, labels
 
 
@@ -161,9 +161,9 @@ def inputs(eval_data):
         raise ValueError('Please supply a data_dir')
     data_dir = FLAGS.data_dir
     # data_dir = os.path.join(FLAGS.data_dir, 'cifar-10-batches-bin')
-    images, labels = planet_input.inputs(eval_data=eval_data,
-                                         data_dir=data_dir,
-                                         batch_size=FLAGS.batch_size)
+    images, labels = input.inputs(eval_data=eval_data,
+                                  data_dir=data_dir,
+                                  batch_size=FLAGS.batch_size)
     return images, labels
 
 
@@ -320,7 +320,7 @@ def train(total_loss, global_step):
       train_op: op for training.
     """
     # Variables that affect learning rate.
-    num_batches_per_epoch = planet_input.NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN / FLAGS.batch_size
+    num_batches_per_epoch = input.NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN / FLAGS.batch_size
     decay_steps = int(num_batches_per_epoch * NUM_EPOCHS_PER_DECAY)
 
     # Decay the learning rate exponentially based on the number of steps.

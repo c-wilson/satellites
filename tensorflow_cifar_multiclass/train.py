@@ -41,7 +41,7 @@ import tensorflow as tf
 import sys
 sys.path.extend('../')
 print(sys.path)
-import model
+from tensorflow_cifar_multiclass import model
 
 FLAGS = tf.app.flags.FLAGS
 

@@ -132,7 +132,7 @@ def _generate_image_and_label_batch(image, label, min_queue_examples,
       batch_size: Number of images per batch.
       shuffle: boolean indicating whether to use a shuffling queue.
     Returns:
-      images: Images. 4D tensor of [batch_size, height, width, 3] size.
+      images: Images. 4D tensor of [batch_size, height, width, 4] size.
       labels: Labels. 1D tensor of [batch_size] size.
     """
     # Create a queue that shuffles the examples, and then
